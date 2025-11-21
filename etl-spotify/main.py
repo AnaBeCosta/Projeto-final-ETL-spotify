@@ -47,3 +47,15 @@ df1_csv[colunas1] = df1_csv[colunas1].fillna('Não informado')
 df2_csv[colunas2] = df2_csv[colunas2].fillna('Não informado')
 
 print('- Tratamento de valores nulos')
+
+##Convertendo formato de data (MM/DD/AA → DD/MM/AA)'
+print('- Tratamento da formatação de data')
+
+colunas3 = ['album_release_date']
+
+df1_csv[colunas3] = pd.to_datetime(df1_csv[colunas3], format='%m/%d/%y', errors='coerce')
+df2_csv[colunas3] = pd.to_datetime(df2_csv[colunas3], format='%m/%d/%y', errors='coerce')
+
+df1_csv[colunas3] = df1_csv[colunas3].dt.strftime('%d/%m/%y')
+df2_csv[colunas3] = df2_csv[colunas3].dt.strftime('%d/%m/%y')
+
