@@ -39,7 +39,7 @@ df1_csv[colunas1] = df1_csv[colunas1].fillna('Não informado')
 df2_csv[colunas2] = df2_csv[colunas2].fillna('Não informado')
 
 ##Convertendo formato de data (MM/DD/AA → DD/MM/AA)'
-colunas3 = ['album_release_date']
+colunas3 = 'album_release_date'
 
 df1_csv[colunas3] = pd.to_datetime(df1_csv[colunas3], format='%m/%d/%y', errors='coerce')
 df2_csv[colunas3] = pd.to_datetime(df2_csv[colunas3], format='%m/%d/%y', errors='coerce')
