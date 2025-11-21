@@ -3,14 +3,37 @@
 import pandas as pd
 import numpy as np
 
+print("******Iniciando o processo de ETL para dados do Spotify...******\n")
 
-df1_csv = pd.read_csv('spotify_data clean.csv')
+df1_csv = pd.read_csv('spotify_data_clean.csv')
 df2_csv = pd.read_csv('track_data_final.csv')
 
 #print(df1_csv.info())
 #print(df2_csv.info())
 
-print(df1_csv.isna().sum())
-print(df2_csv.isna().sum())
+print("******Finalizando o processo de ETL******\n")
 
 ##TRANSFORMAÇÃO
+
+print("******Iniciando o processo de transformação******\n")
+
+print('- Checagem de dados duplicados')
+
+duplicados_df1 = df1_csv.duplicated().sum()
+duplicados_df2 = df2_csv.duplicated().sum()
+
+if (duplicados_df1 > 0 or duplicados_df2 > 0) :
+    df1_csv = df1_csv.drop_duplicates()
+    df2_csv = df2_csv.drop_duplicates()
+
+    print('Linhas duplicadas removidas com sucesso!')
+
+
+##Substituindo valores nulos(tipo string) por 'Não informado'
+print('- Tratamento de valores nulos')
+
+colunas1 = ['artist_genres', 'artist_name']
+colunas2 = ['track_name', 'artist_genres', 'album_name', 'artist_name']
+
+df1_csv[colunas1] = df1_csv[colunas1].fillna('Não informado')
+df2_csv[colunas2] = df2_csv[colunas2].fillna('Não informado')
