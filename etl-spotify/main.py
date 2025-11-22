@@ -4,8 +4,8 @@ print("******Iniciando o processo de ETL para dados do Spotify...******\n")
 import pandas as pd
 import numpy as np
 
-df1_csv = pd.read_csv('spotify_data_clean.csv')
-df2_csv = pd.read_csv('track_data_final.csv')
+df1_csv = pd.read_csv('etl-spotify/spotify_data_clean.csv')
+df2_csv = pd.read_csv('etl-spotify/track_data_final.csv')
 print("******Finalizando o processo de ETL******\n")
 
 
@@ -56,8 +56,34 @@ df2_csv[colunas2] = df2_csv[colunas2].apply(lambda col: col.map(lambda x: x.lowe
 df1_csv[colunas1] = df1_csv[colunas1].apply(lambda col: col.map(lambda x: x.strip() if isinstance(x, str) else x))
 df2_csv[colunas2] = df2_csv[colunas2].apply(lambda col: col.map(lambda x: x.strip() if isinstance(x, str) else x))
 
-# Remover caracteres especiais
-regex_limpeza = {r'[^\w\s]': ''}
+# Remover caracteres especiais (mantém a virgula para gêneros musicais)
+regex_limpeza = {r'[^\w\s,]': ''}
 
 df1_csv['artist_genres'] = df1_csv['artist_genres'].replace(regex_limpeza, regex=True)
 df2_csv[colunas2SemName] = df2_csv[colunas2SemName].replace(regex_limpeza, regex=True)
+
+df1_csv['artist_genres'] = (
+    df1_csv['artist_genres']
+        .str.replace(", ", ",", regex=False)  # remove espaço inconsistente
+        .str.replace(",", ", ", regex=False)  # adiciona espaço padrão
+)
+
+df2_csv['artist_genres'] = (
+    df2_csv['artist_genres']
+        .str.replace(", ", ",", regex=False)
+        .str.replace(",", ", ", regex=False)
+)
+
+#Preencher os vazios que ficaram na coluna artist_genres após a limpeza
+df2_csv['artist_genres'] = df2_csv['artist_genres'].replace('', 'Não informado')
+
+#Analisar frequência de gêneros musicais
+generos_df1 = df1_csv['artist_genres'].str.get_dummies(sep=', ')
+
+frequencia1 = generos_df1.sum()
+#print(frequencia1.sort_values(ascending=False))
+
+generos_df2 = df2_csv['artist_genres'].str.get_dummies(sep=', ')
+
+frequencia2 = generos_df2.sum()
+#print(frequencia2.sort_values(ascending=False))
