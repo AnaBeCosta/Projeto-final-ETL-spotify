@@ -34,6 +34,7 @@ df1_csv.dropna(subset=['artist_followers'], inplace=True)
 
 colunas1 = ['artist_genres', 'artist_name']
 colunas2 = ['track_name', 'artist_genres', 'album_name', 'artist_name']
+colunas2SemName = ['artist_genres', 'album_name']
 
 df1_csv[colunas1] = df1_csv[colunas1].fillna('Não informado')
 df2_csv[colunas2] = df2_csv[colunas2].fillna('Não informado')
@@ -46,3 +47,17 @@ df2_csv[colunas3] = pd.to_datetime(df2_csv[colunas3], format='%m/%d/%y', errors=
 
 df1_csv[colunas3] = df1_csv[colunas3].dt.strftime('%d/%m/%y')
 df2_csv[colunas3] = df2_csv[colunas3].dt.strftime('%d/%m/%y')
+
+#Todos os textos com letras minúsculas
+df1_csv[colunas1] = df1_csv[colunas1].apply(lambda col: col.map(lambda x: x.lower() if isinstance(x, str) else x))
+df2_csv[colunas2] = df2_csv[colunas2].apply(lambda col: col.map(lambda x: x.lower() if isinstance(x, str) else x))
+
+# Remover espaços início/fim
+df1_csv[colunas1] = df1_csv[colunas1].apply(lambda col: col.map(lambda x: x.strip() if isinstance(x, str) else x))
+df2_csv[colunas2] = df2_csv[colunas2].apply(lambda col: col.map(lambda x: x.strip() if isinstance(x, str) else x))
+
+# Remover caracteres especiais
+regex_limpeza = {r'[^\w\s]': ''}
+
+df1_csv['artist_genres'] = df1_csv['artist_genres'].replace(regex_limpeza, regex=True)
+df2_csv[colunas2SemName] = df2_csv[colunas2SemName].replace(regex_limpeza, regex=True)
