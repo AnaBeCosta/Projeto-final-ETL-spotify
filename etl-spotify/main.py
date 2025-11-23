@@ -39,14 +39,15 @@ colunas2SemName = ['artist_genres', 'album_name']
 df1_csv[colunas1] = df1_csv[colunas1].fillna('Não informado')
 df2_csv[colunas2] = df2_csv[colunas2].fillna('Não informado')
 
-##Convertendo formato de data (MM/DD/AA → DD/MM/AA)'
+# Converter datas automaticamente
 colunas3 = 'album_release_date'
 
-df1_csv[colunas3] = pd.to_datetime(df1_csv[colunas3], format='%m/%d/%y', errors='coerce')
-df2_csv[colunas3] = pd.to_datetime(df2_csv[colunas3], format='%m/%d/%y', errors='coerce')
+df1_csv[colunas3] = pd.to_datetime(df1_csv[colunas3], errors='coerce')
+df2_csv[colunas3] = pd.to_datetime(df2_csv[colunas3], errors='coerce')
 
-df1_csv[colunas3] = df1_csv[colunas3].dt.strftime('%d/%m/%y')
-df2_csv[colunas3] = df2_csv[colunas3].dt.strftime('%d/%m/%y')
+# Formatar para DD/MM/YYYY
+df1_csv[colunas3] = df1_csv[colunas3].dt.strftime('%d/%m/%Y')
+df2_csv[colunas3] = df2_csv[colunas3].dt.strftime('%d/%m/%Y')
 
 #Todos os textos com letras minúsculas
 df1_csv[colunas1] = df1_csv[colunas1].apply(lambda col: col.map(lambda x: x.lower() if isinstance(x, str) else x))
@@ -86,4 +87,5 @@ frequencia1 = generos_df1.sum()
 generos_df2 = df2_csv['artist_genres'].str.get_dummies(sep=', ')
 
 frequencia2 = generos_df2.sum()
+
 #print(frequencia2.sort_values(ascending=False))
