@@ -3,6 +3,7 @@ print("******Iniciando o processo de ETL para dados do Spotify...******\n")
 
 import pandas as pd
 import numpy as np
+import sqlite3 as sql
 
 df1_csv = pd.read_csv('etl-spotify/spotify_data_clean.csv')
 df2_csv = pd.read_csv('etl-spotify/track_data_final.csv')
@@ -89,3 +90,61 @@ generos_df2 = df2_csv['artist_genres'].str.get_dummies(sep=', ')
 frequencia2 = generos_df2.sum()
 
 #print(frequencia2.sort_values(ascending=False))
+
+
+
+#CARGA
+# Criar um banco SQLite (arquivos spotify_data_clean e track_data_final.csv).
+conexao = sql.connect("spotify.db")
+cursor = conexao.cursor()
+
+# Criando tabelas
+cursor.execute("""
+CREATE TABLE spotify_data_clean (
+  track_id TEXT PRIMARY KEY,
+  track_name TEXT,
+  track_number INTEGER,
+  track_popularity INTEGER,
+  explicit INTEGER,
+  artist_name TEXT,
+  artist_popularity INTEGER,
+  artist_followers INTEGER,
+  artist_genres TEXT,
+  album_id TEXT,
+  album_name TEXT,
+  album_release_date TEXT,
+  album_total_tracks INTEGER,
+  album_type TEXT,
+  track_duration_min REAL
+  );
+""")
+
+cursor.execute("""
+CREATE TABLE track_data_final (
+  track_id TEXT PRIMARY KEY,
+  track_name TEXT,
+  track_number INTEGER,
+  track_popularity INTEGER,
+  track_duration_ms REAL,
+  explicit INTEGER,
+  artist_name TEXT,
+  artist_popularity INTEGER,
+  artist_followers INTEGER,
+  artist_genres TEXT,
+  album_id TEXT,
+  album_name TEXT,
+  album_release_date TEXT,
+  album_total_tracks INTEGER,
+  album_type TEXT
+);
+""")
+
+# Salvar os dados tratados.
+df1_csv.to_sql("spotify_data_clean", conexao, if_exists="replace", index=False)
+print("Tabela 'spotify_data_clean' carregada.\n")
+
+df2_csv.to_sql("track_data_final", conexao, if_exists="replace", index=False)
+print("Tabela 'track_data_final' carregada.\n")
+
+conexao.close()
+print("Banco 'spotify.db' criado e carregado com sucesso!\n")
