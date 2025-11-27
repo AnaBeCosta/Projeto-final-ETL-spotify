@@ -1,28 +1,36 @@
-Acesso ao colab - https://colab.research.google.com/drive/10aV27ln5NjTajc3iWVvXvUZKK2k4HgxY?usp=sharing
+# 🎵 Projeto ETL Spotify
+
+## 📝 O que ele faz
+
+Este projeto implementa um processo de **ETL (Extração, Transformação e Carga)** para dados do Spotify. O script principal lê dados de um arquivo CSV, realiza uma série de tratamentos e limpezas, e carrega o resultado em um banco de dados SQLite. O objetivo final é preparar os dados para análise e visualização em ferramentas de Business Intelligence como o Power BI.
 
 
-## 📊 Informações Obrigatórias no Power BI
+## ✨ Funcionalidades
 
-A análise final deve contemplar visualizações que respondam aos seguintes pontos:
+O processo ETL é dividido nas seguintes etapas:
 
-1. 🎨 **Moda do artista**  
-   Calcular qual artista mais se repete nos dados dentro da janela de anos analisada.
+1.  **Extração**: Os dados são lidos a partir de um arquivo CSV para um DataFrame do pandas.
+2.  **Transformação**:
+    *   Remove linhas duplicadas para garantir a consistência.
+    *   Trata valores ausentes, removendo linhas ou preenchendo com "Não informado".
+    *   Converte a coluna de data de lançamento do álbum (`album_release_date`) para o formato `DD/MM/YYYY`.
+    *   Padroniza colunas de texto para letras minúsculas e remove espaços extras.
+    *   Limpa caracteres especiais da coluna de gêneros (`artist_genres`), mantendo a estrutura de lista.
+3.  **Carga**:
+    *   Cria um banco de dados SQLite (`spotify.db`).
+    *   Salva o DataFrame tratado em uma tabela chamada `spotify_data_clean` dentro do banco de dados.
 
-2. ⭐ **Artistas com mais seguidores vs popularidade**  
-   Comparar seguidores e popularidade para identificar discrepâncias ou alinhamentos.
+## ⚙️ Dependências
 
-3. 🎵 **Top 3 gêneros mais ouvidos (2009–2023)**
+Para executar o script de ETL, você precisará das seguintes bibliotecas Python:
 
-4. 💽 **Média de número de músicas por álbum ao longo dos anos**
+*   `pandas`
+*   `numpy`
+*   `sqlite3`
 
-5. ⏱️ **Média da duração das músicas (`track_duration`)**
+## 📂 Arquivos Usados
 
-6. 👥 **Comparação: seguidores × popularidade (ano 2025)**
-
-7. 🔝 **Artistas mais populares em 2025**
-
-8. 📈 **Crescimento de lançamentos por ano**
-
-9. 🕒 **Evolução da popularidade dos artistas ao longo do tempo**
-
-10. 🚻 **Porcentagem de artistas homens e mulheres ao longo dos anos**
+*   `main.py`: O script principal que executa todo o processo de ETL.
+*   `spotify_data_clean.csv`: O arquivo de entrada contendo os dados brutos do Spotify.
+*   `spotify.db`: O banco de dados SQLite gerado como saída do processo, contendo os dados limpos e prontos para análise.
+*   `README.md`: Este arquivo de documentação.
