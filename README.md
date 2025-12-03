@@ -4,6 +4,7 @@
 
 Este projeto implementa um processo de **ETL (Extração, Transformação e Carga)** para dados do Spotify. O script principal lê dados de um arquivo CSV, realiza uma série de tratamentos e limpezas, e carrega o resultado em um banco de dados SQLite. O objetivo final é preparar os dados para análise e visualização em ferramentas de Business Intelligence como o Power BI.
 
+- Link de acesso: https://escolatrabalhador4-my.sharepoint.com/:u:/r/personal/anabecosta_escoladotrabalhador40_com_br/Documents/projeto_final_spotify.pbix?csf=1&web=1&e=dht7oV
 
 ## ✨ Funcionalidades
 
@@ -33,4 +34,5 @@ Para executar o script de ETL, você precisará das seguintes bibliotecas Python
 *   `main.py`: O script principal que executa todo o processo de ETL.
 *   `spotify_data_clean.csv`: O arquivo de entrada contendo os dados brutos do Spotify.
 *   `spotify.db`: O banco de dados SQLite gerado como saída do processo, contendo os dados limpos e prontos para análise.
+
 *   `README.md`: Este arquivo de documentação.
